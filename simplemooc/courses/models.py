@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 from core.mail import send_mail_template
 
@@ -50,6 +51,12 @@ class Course(models.Model):
         from django.urls import reverse
         return reverse("courses:details", kwargs={"slug": self.slug})
     
+    # Mostrar apenas as aulas disponíveis
+    def release_lessons(self):
+        today = timezone.now().date()
+        return self.lessons.filter(release_date__gte = today)
+
+
     # Edições no admin
     class Meta:
         verbose_name = 'Curso'
@@ -69,6 +76,12 @@ class Lesson(models.Model):
 
     def __str__(self):
         return self.name
+
+    def is_avalailable(self):
+        if self.release.date:
+            today = timezone.now().date()
+            return self.release_date >=today
+        return False
 
     class Meta:
         verbose_name = 'Aula'
@@ -176,7 +189,7 @@ def post_save_announcement(instance, created, **kwargs):
         context = {
             'announcement': instance
         }
-        template_name = 'courses/announcement_mail.html'
+        template_name = 'core/announcement_mail.html'
         # Pega todos os usuarios que estão aprovados no curso
         enrollments = Enrollment.objects.filter(
             course=instance.course, status=1)
