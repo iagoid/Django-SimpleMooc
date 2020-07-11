@@ -1,1 +1,1 @@
-web: gunicorn semplemooc.wsgi
+web: gunicorn simplemooc.wsgi

@@ -22,7 +22,9 @@ urlpatterns = [
     path('', include('core.urls'), name='home'),
     path('conta/', include('accounts.urls'), name='accounts'),
     path('cursos/', include('courses.urls'), name='courses'),
+    path('forum/', include('forum.urls'), name='forum'),
     path('admin/', admin.site.urls),
+
 
 ]
 # Em ambiente de desenvolvimento ele pega a URL para salvar os arquivos de imagem

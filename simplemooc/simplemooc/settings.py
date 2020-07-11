@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,9 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Apps
     'accounts',
     'core',
     'courses',
+    'forum',
+    # Libs
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -151,22 +156,4 @@ AUTH_USER_MODEL = 'accounts.User'
 
 # Heroku settings
 
-import dj_database_url
-
-DATABASES = {
-    'default':  dj_database_url.config(),
-}
-
-# Honor the 'X-Forwarded-Proto' header for request.is_secure()
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# Allow all host headers
-ALLOWED_HOSTS = ['*']
-
-STATIC_ROOT = 'staticfiles'
-STATIC_URL = '/static/'
-
-try:
-    from simplemooc.local_settings import *
-except ImportError:
-    pass
+django_heroku.settings(locals())
